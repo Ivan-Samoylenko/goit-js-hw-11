@@ -7,7 +7,7 @@
     <title>Homework 11</title>
   </head>
   <body>
-    <header>
+    <header class="page-header">
       <div class="container">
         <form class="search-form" id="search-form">
           <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
@@ -16,30 +16,29 @@
       </div>
     </header>
 
-    <main>
+    <main class="main-content">
       <div class="container">
         <div class="gallery">
-          <div class="photo-card">
-            <img src="" alt="" width="300" height="225" loading="lazy" />
-            <div class="info">
-              <p class="info-item">
-                <b>Likes</b>
-              </p>
-              <p class="info-item">
-                <b>Views</b>
-              </p>
-              <p class="info-item">
-                <b>Comments</b>
-              </p>
-              <p class="info-item">
-                <b>Downloads</b>
-              </p>
+          <a class="gallery-card" href="">
+            <div class="photo-card">
+              <img src="" alt="" width="290" height="217" loading="lazy" />
+              <div class="info">
+                <p class="info-item"><b>Likes</b> _info_</p>
+                <p class="info-item"><b>Views</b> _info_</p>
+                <p class="info-item"><b>Comments</b> _info_</p>
+                <p class="info-item"><b>Downloads</b> _info_</p>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
-        <button type="button" class="load-more">Load more</button>
+        <div class="js-load-more-btn-place"></div>
       </div>
     </main>
+    <footer class="page-footer">
+      <div class="container">
+        <p>Made by me :)</p>
+      </div>
+    </footer>
 
     <script src="index.js" type="module"></script>
   </body>
