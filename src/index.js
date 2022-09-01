@@ -41,7 +41,7 @@ async function onQuerySubmit(event) {
   if (currentSearch) {
     try {
       const { totalHits, hits } = await fetchImagesFirstTime(currentSearch);
-
+      console.log(totalHits);
       if (totalHits === 0) {
         zeroMatchesMessage();
         return;
