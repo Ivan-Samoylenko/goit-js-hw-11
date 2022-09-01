@@ -26,7 +26,7 @@ async function fetchImages(querry) {
       page: `${page}`,
     },
   });
-  console.log(response);
+
   if (response.status === 200) {
     page += 1;
     return response;

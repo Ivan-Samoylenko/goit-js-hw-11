@@ -40,8 +40,10 @@ async function onQuerySubmit(event) {
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
     try {
-      const { totalHits, hits } = await fetchImagesFirstTime(currentSearch);
-      console.log(totalHits);
+      const {
+        data: { totalHits, hits },
+      } = await fetchImagesFirstTime(currentSearch);
+
       if (totalHits === 0) {
         zeroMatchesMessage();
         return;
@@ -83,7 +85,9 @@ async function onLoadMore() {
   disableLoadMoreBtn();
 
   try {
-    const { totalHits, hits } = await fetchImages(currentSearch);
+    const {
+      data: { totalHits, hits },
+    } = await fetchImages(currentSearch);
 
     totalHitsMessage(totalHits);
 
