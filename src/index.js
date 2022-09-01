@@ -76,7 +76,7 @@ async function onQuerySubmit(event) {
       }
     } catch (err) {
       console.log(err.message);
-      console.log(err.stuck);
+      console.log(err.stack);
     }
   }
 }
@@ -105,7 +105,7 @@ async function onLoadMore() {
     scrollBottom();
   } catch (err) {
     console.log(err.message);
-    console.log(err.stuck);
+    console.log(err.stack);
   }
 
   enableLoadMoreBtn();
