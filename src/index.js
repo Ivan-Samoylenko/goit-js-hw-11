@@ -1,14 +1,19 @@
 // imports
 import './css/styles.css';
-// import axios from 'axios';
-// import Notiflix from 'notiflix';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImages, fetchMoreImages, page, PER_PAGE } from './js/fetch.js';
+import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchImagesFirstTime, fetchImages, page, PER_PAGE } from './js/fetch.js';
 
 // variables
 let currentSearch = null;
-let totalImages = null;
+const lightbox = SimpleLightbox('.gallery a', {
+  captions: true,
+  captionSelector: 'img',
+  captionsData: 'alt',
+  captionDelay: 250,
+  alertError: false,
+});
 
 // references
 const refs = {
@@ -35,33 +40,52 @@ async function onQuerySubmit(event) {
 
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
-    const { total, hits } = await fetchImages(currentSearch);
+    const { totalHits, hits } = await fetchImagesFirstTime(currentSearch);
+
+    if (totalHits === 0) {
+      zeroMatchesMessage();
+      return;
+    }
+
+    totalHitsMessage(totalHits);
 
     renderImages(hits);
 
+    lightbox.refresh();
+
     event.target.reset();
 
-    const maxPage = total / PER_PAGE;
+    const maxPage = totalHits / PER_PAGE;
     if (maxPage > page) {
       refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
     } else {
-      noMoreImages();
+      noMoreImagesMessage();
       currentSearch = null;
     }
   }
 }
 
 async function onLoadMore() {
-  const { total, hits } = await fetchMoreImages(currentSearch);
+  disableLoadMoreBtn();
+
+  const { totalHits, hits } = await fetchImages(currentSearch);
+
+  totalHitsMessage(totalHits);
 
   renderImages(hits);
 
-  const maxPage = total / PER_PAGE;
+  lightbox.refresh();
+
+  enableLoadMoreBtn();
+
+  const maxPage = totalHits / PER_PAGE;
   if (maxPage < page) {
     refs.loadMoreBtn.remove();
-    noMoreImages();
+    noMoreImagesMessage();
     currentSearch = null;
   }
+
+  scrollBottom();
 }
 
 // functions helpers
@@ -114,4 +138,25 @@ function scrollBottom() {
 }
 
 // messages
-function noMoreImages() {}
+function totalHitsMessage(totalHits) {
+  return Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+}
+
+function noMoreImagesMessage() {
+  return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+}
+
+function zeroMatchesMessage() {
+  return Notiflix.Notify.info(
+    'Sorry, there are no images matching your search query. Please try again.',
+  );
+}
+
+// Load more button functions
+function enableLoadMoreBtn() {
+  refs.loadMoreBtn.removeAttribute('disabled');
+}
+
+function disableLoadMoreBtn() {
+  refs.loadMoreBtn.setAttribute('disabled', true);
+}
