@@ -54,7 +54,7 @@ async function onQuerySubmit(event) {
       renderImages(hits);
 
       if (!lightbox) {
-        lightbox = SimpleLightbox('.gallery a', {
+        lightbox = new SimpleLightbox('.gallery a', {
           captions: true,
           captionSelector: 'img',
           captionsData: 'alt',
