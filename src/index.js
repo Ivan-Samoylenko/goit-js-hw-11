@@ -3,17 +3,16 @@ import './css/styles.css';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImagesFirstTime, fetchImages, page, PER_PAGE } from './js/fetch.js';
+import {
+  fetchImagesFirstTime,
+  fetchImages,
+  page,
+  PER_PAGE,
+} from './js/fetch.js';
 
 // variables
 let currentSearch = null;
-const lightbox = SimpleLightbox('.gallery a', {
-  captions: true,
-  captionSelector: 'img',
-  captionsData: 'alt',
-  captionDelay: 250,
-  alertError: false,
-});
+let lightbox = null;
 
 // references
 const refs = {
@@ -40,27 +39,38 @@ async function onQuerySubmit(event) {
 
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
-    const { totalHits, hits } = await fetchImagesFirstTime(currentSearch);
+    try {
+      const { totalHits, hits } = await fetchImagesFirstTime(currentSearch);
 
-    if (totalHits === 0) {
-      zeroMatchesMessage();
-      return;
-    }
+      if (totalHits === 0) {
+        zeroMatchesMessage();
+        return;
+      }
 
-    totalHitsMessage(totalHits);
+      totalHitsMessage(totalHits);
 
-    renderImages(hits);
+      renderImages(hits);
 
-    lightbox.refresh();
+      lightbox = SimpleLightbox('.gallery a', {
+        captions: true,
+        captionSelector: 'img',
+        captionsData: 'alt',
+        captionDelay: 250,
+        alertError: false,
+      });
 
-    event.target.reset();
+      event.target.reset();
 
-    const maxPage = totalHits / PER_PAGE;
-    if (maxPage > page) {
-      refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
-    } else {
-      noMoreImagesMessage();
-      currentSearch = null;
+      const maxPage = totalHits / PER_PAGE;
+      if (maxPage > page) {
+        refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
+      } else {
+        noMoreImagesMessage();
+        currentSearch = null;
+      }
+    } catch (err) {
+      console.log(err.message);
+      console.log(err.stuck);
     }
   }
 }
@@ -68,24 +78,29 @@ async function onQuerySubmit(event) {
 async function onLoadMore() {
   disableLoadMoreBtn();
 
-  const { totalHits, hits } = await fetchImages(currentSearch);
+  try {
+    const { totalHits, hits } = await fetchImages(currentSearch);
 
-  totalHitsMessage(totalHits);
+    totalHitsMessage(totalHits);
 
-  renderImages(hits);
+    renderImages(hits);
 
-  lightbox.refresh();
+    lightbox.refresh();
 
-  enableLoadMoreBtn();
+    const maxPage = totalHits / PER_PAGE;
+    if (maxPage < page) {
+      refs.loadMoreBtn.remove();
+      noMoreImagesMessage();
+      currentSearch = null;
+    }
 
-  const maxPage = totalHits / PER_PAGE;
-  if (maxPage < page) {
-    refs.loadMoreBtn.remove();
-    noMoreImagesMessage();
-    currentSearch = null;
+    scrollBottom();
+  } catch (err) {
+    console.log(err.message);
+    console.log(err.stuck);
   }
 
-  scrollBottom();
+  enableLoadMoreBtn();
 }
 
 // functions helpers
@@ -143,12 +158,14 @@ function totalHitsMessage(totalHits) {
 }
 
 function noMoreImagesMessage() {
-  return Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+  return Notiflix.Notify.info(
+    "We're sorry, but you've reached the end of search results."
+  );
 }
 
 function zeroMatchesMessage() {
   return Notiflix.Notify.info(
-    'Sorry, there are no images matching your search query. Please try again.',
+    'Sorry, there are no images matching your search query. Please try again.'
   );
 }
 
