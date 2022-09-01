@@ -29,7 +29,7 @@ async function fetchImages(querry) {
 
   if (response.status === 200) {
     page += 1;
-    return await response.json();
+    return response;
   }
 
   throw new Error('404');

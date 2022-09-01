@@ -51,13 +51,17 @@ async function onQuerySubmit(event) {
 
       renderImages(hits);
 
-      lightbox = SimpleLightbox('.gallery a', {
-        captions: true,
-        captionSelector: 'img',
-        captionsData: 'alt',
-        captionDelay: 250,
-        alertError: false,
-      });
+      if (!lightbox) {
+        lightbox = SimpleLightbox('.gallery a', {
+          captions: true,
+          captionSelector: 'img',
+          captionsData: 'alt',
+          captionDelay: 250,
+          alertError: false,
+        });
+      } else {
+        lightbox.refresh();
+      }
 
       event.target.reset();
 
