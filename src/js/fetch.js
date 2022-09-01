@@ -26,11 +26,12 @@ async function fetchImages(querry) {
       page: `${page}`,
     },
   });
-  console.dir(response);
-  if (response.status.ok) {
+
+  if (response.status === 200) {
     page += 1;
     return await response.json();
   }
+
   throw new Error('404');
 }
 
