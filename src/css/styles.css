@@ -41,7 +41,7 @@ button {
 
   box-shadow: inset -2px -2px 2px #833316, inset 2px 2px 2px #eb8d6b;
 
-  transition: background-color linear 150ms, box-shadow linear 150ms;
+  transition: background-color 150ms linear, box-shadow 150ms linear;
 }
 
 button:hover,
@@ -113,7 +113,7 @@ button:active {
 
   box-shadow: 2px 2px 4px #808080, -1px 0 3px #808080;
 
-  transition: box-shadow linear 150ms;
+  transition: box-shadow 150ms linear;
 }
 
 .gallery-card:hover,
@@ -167,4 +167,13 @@ button:active {
 .page-footer p {
   text-align: center;
   color: #ffffff;
+}
+
+.page-footer a {
+  transition: color 150ms linear;
+}
+
+.page-footer a:hover,
+.page-footer a:focus {
+  color: #e96839;
 }

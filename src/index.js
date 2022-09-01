@@ -4,8 +4,11 @@ import './css/styles.css';
 // import Notiflix from 'notiflix';
 // import SimpleLightbox from 'simplelightbox';
 // import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchImages, fetchMoreImages, page, PER_PAGE } from './js/fetch.js';
 
 // variables
+let currentSearch = null;
+let totalImages = null;
 
 // references
 const refs = {
@@ -22,23 +25,81 @@ refs.loadMoreBtn.textContent = 'Load more';
 
 // event listeners
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
+refs.searchForm.addEventListener('submit', onQuerySubmit);
 
 // event functions
-function onLoadMore() {}
+async function onQuerySubmit(event) {
+  event.preventDefault();
+
+  resetImages();
+
+  currentSearch = event.target.elements.searchQuery.value.trim();
+  if (currentSearch) {
+    const { total, hits } = await fetchImages(currentSearch);
+
+    renderImages(hits);
+
+    event.target.reset();
+
+    const maxPage = total / PER_PAGE;
+    if (maxPage > page) {
+      refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
+    } else {
+      noMoreImages();
+      currentSearch = null;
+    }
+  }
+}
+
+async function onLoadMore() {
+  const { total, hits } = await fetchMoreImages(currentSearch);
+
+  renderImages(hits);
+
+  const maxPage = total / PER_PAGE;
+  if (maxPage < page) {
+    refs.loadMoreBtn.remove();
+    noMoreImages();
+    currentSearch = null;
+  }
+}
 
 // functions helpers
-function createCardMarkup(card) {
-  return `<a class="gallery-card" href="${card}">
+function createCardMarkup({
+  comments,
+  views,
+  largeImageURL,
+  webformatURL,
+  likes,
+  downloads,
+  tags,
+}) {
+  return `<a class="gallery-card" href="${largeImageURL}">
             <div class="photo-card">
-              <img src="${card}" alt="${card}" width="290" height="217" loading="lazy" />
+              <img src="${webformatURL}" alt="${tags}" width="290" height="217" loading="lazy" />
               <div class="info">
-                <p class="info-item"><b>Likes</b> ${card}</p>
-                <p class="info-item"><b>Views</b> ${card}</p>
-                <p class="info-item"><b>Comments</b> ${card}</p>
-                <p class="info-item"><b>Downloads</b> ${card}</p>
+                <p class="info-item"><b>Likes</b> ${likes}</p>
+                <p class="info-item"><b>Views</b> ${views}</p>
+                <p class="info-item"><b>Comments</b> ${comments}</p>
+                <p class="info-item"><b>Downloads</b> ${downloads}</p>
               </div>
             </div>
           </a>`;
+}
+
+function createOnePageMurkup(cards) {
+  return cards.reduce((acc, card) => {
+    return acc + createCardMarkup(card);
+  }, '');
+}
+
+function renderImages(cards) {
+  const markup = createOnePageMurkup(cards);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+}
+
+function resetImages() {
+  refs.gallery.innerHTML = '';
 }
 
 function scrollBottom() {
@@ -51,3 +112,6 @@ function scrollBottom() {
     behavior: 'smooth',
   });
 }
+
+// messages
+function noMoreImages() {}
