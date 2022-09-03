@@ -30,5 +30,3 @@ async function fetchImages(querry) {
 }
 
 export { fetchImages, page, PER_PAGE };
-
-fetchImages('dog');
