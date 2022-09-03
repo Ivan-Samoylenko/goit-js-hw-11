@@ -11,10 +11,10 @@ let lightbox = null;
 
 // references
 const refs = {
+  loadMoreBtn: dovument.createElement('button'),
   loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
-  loadMoreBtn: dovument.createElement('button'),
 };
 
 // Load more button
