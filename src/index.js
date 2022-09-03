@@ -3,11 +3,12 @@ import './css/styles.css';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImages, page, PER_PAGE } from './js/fetch.js';
+import { fetchImages, PER_PAGE } from './js/fetch.js';
 
 // variables
 let currentSearch = null;
 let lightbox = null;
+let page = 1;
 
 // references
 const refs = {
@@ -34,7 +35,7 @@ async function onQuerySubmit(event) {
 
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
-    // page = 1;
+    page = 1;
     try {
       const {
         data: { totalHits, hits },
@@ -65,7 +66,7 @@ async function onQuerySubmit(event) {
 
       if (totalHits > PER_PAGE) {
         refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
-        // page += 1;
+        page += 1;
       } else {
         noMoreImagesMessage();
         currentSearch = null;
@@ -97,7 +98,7 @@ async function onLoadMore() {
       currentSearch = null;
     }
 
-    // page += 1;
+    page += 1;
 
     scrollBottom();
   } catch (err) {
@@ -182,3 +183,6 @@ function enableLoadMoreBtn() {
 function disableLoadMoreBtn() {
   refs.loadMoreBtn.setAttribute('disabled', true);
 }
+
+// exports
+export { page };
