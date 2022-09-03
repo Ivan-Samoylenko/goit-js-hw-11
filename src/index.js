@@ -11,9 +11,9 @@ let lightbox = null;
 
 // references
 const refs = {
+  loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
-  loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
   loadMoreBtn: dovument.createElement('button'),
 };
 
