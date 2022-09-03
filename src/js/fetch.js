@@ -5,7 +5,7 @@ const KEY = '29632331-970c63df483138173fd88b904';
 const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = 'true';
-const PER_PAGE = 36;
+const PER_PAGE = 40;
 
 let page = 1;
 
