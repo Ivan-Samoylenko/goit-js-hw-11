@@ -15,7 +15,7 @@ const refs = {
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
-  loadMoreBtn: dovument.createElement('button'),
+  loadMoreBtn: document.createElement('button'),
 };
 
 // Load more button
