@@ -9,11 +9,6 @@ const PER_PAGE = 36;
 
 let page = 1;
 
-async function fetchImagesFirstTime(querry) {
-  page = 1;
-  return fetchImages(querry);
-}
-
 async function fetchImages(querry) {
   const response = await axios.get(URL, {
     params: {
@@ -28,13 +23,12 @@ async function fetchImages(querry) {
   });
 
   if (response.status === 200) {
-    page += 1;
     return response;
   }
 
   throw new Error('404');
 }
 
-export { fetchImagesFirstTime, fetchImages, page, PER_PAGE };
+export { fetchImages, page, PER_PAGE };
 
 fetchImages('dog');

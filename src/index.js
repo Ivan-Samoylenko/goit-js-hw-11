@@ -3,12 +3,7 @@ import './css/styles.css';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import {
-  fetchImagesFirstTime,
-  fetchImages,
-  page,
-  PER_PAGE,
-} from './js/fetch.js';
+import { fetchImages, page, PER_PAGE } from './js/fetch.js';
 
 // variables
 let currentSearch = null;
@@ -39,10 +34,11 @@ async function onQuerySubmit(event) {
 
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
+    page = 1;
     try {
       const {
         data: { totalHits, hits },
-      } = await fetchImagesFirstTime(currentSearch);
+      } = await fetchImages(currentSearch);
 
       if (totalHits === 0) {
         zeroMatchesMessage();
@@ -67,9 +63,9 @@ async function onQuerySubmit(event) {
 
       event.target.reset();
 
-      const maxPage = totalHits / PER_PAGE;
-      if (maxPage > page) {
+      if (totalHits > PER_PAGE) {
         refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
+        page += 1;
       } else {
         noMoreImagesMessage();
         currentSearch = null;
@@ -95,12 +91,13 @@ async function onLoadMore() {
 
     lightbox.refresh();
 
-    const maxPage = totalHits / PER_PAGE;
-    if (maxPage < page) {
+    if (totalHits < PER_PAGE * page) {
       refs.loadMoreBtn.remove();
       noMoreImagesMessage();
       currentSearch = null;
     }
+
+    page += 1;
 
     scrollBottom();
   } catch (err) {
