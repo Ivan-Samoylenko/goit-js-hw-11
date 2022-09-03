@@ -10,11 +10,12 @@ let currentSearch = null;
 let lightbox = null;
 
 // references
-const refs = {};
-refs.searchForm = document.querySelector('#search-form');
-refs.gallery = document.querySelector('.gallery');
-refs.loadMoreBtnPlace = document.querySelector('.js-load-more-btn-place');
-refs.loadMoreBtn = dovument.createElement('button');
+const refs = {
+  searchForm: document.querySelector('#search-form'),
+  gallery: document.querySelector('.gallery'),
+  loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
+  loadMoreBtn: dovument.createElement('button'),
+};
 
 // Load more button
 refs.loadMoreBtn.setAttribute('type', 'button');
@@ -33,7 +34,7 @@ async function onQuerySubmit(event) {
 
   currentSearch = event.target.elements.searchQuery.value.trim();
   if (currentSearch) {
-    page = 1;
+    // page = 1;
     try {
       const {
         data: { totalHits, hits },
@@ -64,7 +65,7 @@ async function onQuerySubmit(event) {
 
       if (totalHits > PER_PAGE) {
         refs.loadMoreBtnPlace.append(refs.loadMoreBtn);
-        page += 1;
+        // page += 1;
       } else {
         noMoreImagesMessage();
         currentSearch = null;
@@ -96,7 +97,7 @@ async function onLoadMore() {
       currentSearch = null;
     }
 
-    page += 1;
+    // page += 1;
 
     scrollBottom();
   } catch (err) {
