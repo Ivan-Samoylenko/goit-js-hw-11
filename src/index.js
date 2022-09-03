@@ -14,10 +14,10 @@ const refs = {
   searchForm: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
-  loadMoreBtn: document.createElement('button'),
 };
 
 // Load more button
+refs.loadMoreBtn = document.createElement('button');
 refs.loadMoreBtn.setAttribute('type', 'button');
 refs.loadMoreBtn.classList.add('load-more');
 refs.loadMoreBtn.textContent = 'Load more';
