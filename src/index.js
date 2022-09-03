@@ -10,12 +10,11 @@ let currentSearch = null;
 let lightbox = null;
 
 // references
-const refs = {
-  loadMoreBtn: dovument.createElement('button'),
-  loadMoreBtnPlace: document.querySelector('.js-load-more-btn-place'),
-  searchForm: document.querySelector('#search-form'),
-  gallery: document.querySelector('.gallery'),
-};
+const refs = {};
+refs.searchForm = document.querySelector('#search-form');
+refs.gallery = document.querySelector('.gallery');
+refs.loadMoreBtnPlace = document.querySelector('.js-load-more-btn-place');
+refs.loadMoreBtn = dovument.createElement('button');
 
 // Load more button
 refs.loadMoreBtn.setAttribute('type', 'button');
